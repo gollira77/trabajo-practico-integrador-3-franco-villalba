@@ -7,7 +7,7 @@ import TasksPage from "../pages/Tasks";
 import PrivateRoute from "../pages/PrivateRoute";
 import PublicRoute from "../pages/PublicRoute";
 
-const AppRouter = ({ isAuth, onLogin }) => {
+const AppRouter = ({ isAuth, onLogin, onLogout }) => {
 
     return (
         <Routes>
@@ -40,7 +40,7 @@ const AppRouter = ({ isAuth, onLogin }) => {
             path="/profile"
             element={
             <PrivateRoute isAuth={isAuth}>
-                <ProfilePage />
+            <ProfilePage onLogout={onLogout} />
             </PrivateRoute>
             }
         />

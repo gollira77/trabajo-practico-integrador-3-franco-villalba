@@ -1,5 +1,6 @@
 import useForm from "../hooks/useForm.js";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Loading from "../../components/Loading";
 
 const RegisterPage = ({ onLoginSuccess }) => {
@@ -201,9 +202,12 @@ const RegisterPage = ({ onLoginSuccess }) => {
 
         <p className="text-center text-sm text-zinc-500 mt-6">
           ¿Ya tienes cuenta?{" "}
-          <span className="text-red-500 hover:text-red-400 cursor-pointer transition font-medium">
-            Inicia sesión
-          </span>
+          <Link
+            to="/login"
+            className="text-red-500 hover:text-red-400 cursor-pointer transition font-medium"
+          >
+            Iniciar Sesion
+          </Link>
         </p>
       </div>
     </main>

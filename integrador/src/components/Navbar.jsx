@@ -1,11 +1,17 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 
 const Navbar = ({ isAuth, onLogout }) => {
-    const navigate = useNavigate();
-
-    const handleLogoutClick = () => {
+        const handleLogoutClick = async () => {
+        try {
+        await fetch("http://localhost:3000/api/logout", {
+            credentials: "include",
+        });
+        } catch (error) {
+        console.error("Error al cerrar sesión en el backend:", error);
+        } finally {
         onLogout();
-        navigate("/login");
+    }
     };
 
     return (

@@ -20,7 +20,11 @@ const App = () => {
   return (
     <>
       <Navbar isAuth={isAuth} onLogout={handleLogout} />
-      <AppRouter isAuth={isAuth} onLogin={handleLogin} />
+      <AppRouter
+        isAuth={isAuth}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+      />
       <Footer />
     </>
   );
