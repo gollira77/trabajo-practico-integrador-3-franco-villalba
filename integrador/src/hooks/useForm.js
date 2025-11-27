@@ -4,15 +4,18 @@ const useForm = (initialValues = {}) => {
     const [values, setValues] = useState(initialValues);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setValues({ ...values, [name]: value });
+        const { name, value, type, checked } = e.target;
+        const newValue = type === "checkbox" ? checked : value;
+
+        setValues((prevValues) => ({ ...prevValues, [name]: newValue }));
+        setValues({ ...values, [name]: newValue });
     };
 
     const handleReset = () => {
         setValues(initialValues);
     };
 
-    return { values, handleChange, handleReset };
+    return { values, setValues, handleChange, handleReset };
 };
 
 export default useForm;

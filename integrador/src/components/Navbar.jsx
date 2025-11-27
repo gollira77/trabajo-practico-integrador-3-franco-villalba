@@ -5,6 +5,7 @@ const Navbar = ({ isAuth, onLogout }) => {
         const handleLogoutClick = async () => {
         try {
         await fetch("http://localhost:3000/api/logout", {
+            method: "POST",
             credentials: "include",
         });
         } catch (error) {
