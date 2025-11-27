@@ -1,6 +1,8 @@
 import useForm from "../hooks/useForm.js";
+import { useState } from "react";
+import Loading from "../../components/Loading";
 
-const RegisterPage = () => {
+const RegisterPage = ({ onLoginSuccess }) => {
   const { values, handleChange, handleReset } = useForm({
     username: "",
     email: "",
@@ -10,14 +12,48 @@ const RegisterPage = () => {
     dni: "",
   });
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Valores de registro:", values);
-    handleReset();
+      setLoading(true);
+
+    const payload = {
+      name: values.firstname,
+      lastname: values.lastname,
+      username: values.username,
+      email: values.email,
+      password: values.password,
+    };
+
+    try {
+      const res = await fetch("http://localhost:3000/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        onLoginSuccess();
+      } else {
+        alert(data.message || "Error en el registro");
+        handleReset();
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error al conectar con el servidor");
+      handleReset();
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-zinc-950 text-white py-12">
+      {loading && <Loading />}
       <div className="w-full max-w-md bg-zinc-900/60 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-zinc-800">
         <h2 className="text-3xl font-semibold text-center mb-2 text-white tracking-tight">
           Crear cuenta
@@ -41,6 +77,7 @@ const RegisterPage = () => {
               placeholder="Nombre de usuario"
               value={values.username}
               onChange={handleChange}
+              disabled={loading}
               className="w-full px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500
                         focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition"
               required
@@ -61,6 +98,7 @@ const RegisterPage = () => {
               placeholder="correo@ejemplo.com"
               value={values.email}
               onChange={handleChange}
+              disabled={loading}
               className="w-full px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500
                         focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition"
               required
@@ -81,6 +119,7 @@ const RegisterPage = () => {
               placeholder="••••••••"
               value={values.password}
               onChange={handleChange}
+              disabled={loading}
               className="w-full px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500
                         focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition"
               required
@@ -102,6 +141,7 @@ const RegisterPage = () => {
                 placeholder="Hai"
                 value={values.firstname}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500
                           focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition"
                 required
@@ -121,6 +161,7 @@ const RegisterPage = () => {
                 placeholder="Weiss"
                 value={values.lastname}
                 onChange={handleChange}
+                disabled={loading}
                 className="w-full px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500
                           focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition"
                 required
@@ -142,19 +183,19 @@ const RegisterPage = () => {
               placeholder="12345678"
               value={values.dni}
               onChange={handleChange}
+              disabled={loading}
               className="w-full px-4 py-2.5 rounded-lg bg-zinc-950 border border-zinc-800 text-white placeholder-zinc-500
                         focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition"
               required
             />
           </div>
 
-          {/* Boton */}
           <button
             type="submit"
             className="w-full py-2.5 bg-red-600 hover:bg-red-700 rounded-lg font-medium transition
                       shadow-lg shadow-red-600/20"
           >
-            Registrarse
+            {loading ? "Registrando..." : "Registrarse"}
           </button>
         </form>
 
@@ -167,7 +208,6 @@ const RegisterPage = () => {
       </div>
     </main>
   );
-  return <h1>Soy el RegisterPage</h1>;
 };
 
 export default RegisterPage;

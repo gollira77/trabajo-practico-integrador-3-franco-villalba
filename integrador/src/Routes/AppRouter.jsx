@@ -7,53 +7,52 @@ import TasksPage from "../pages/Tasks";
 import PrivateRoute from "../pages/PrivateRoute";
 import PublicRoute from "../pages/PublicRoute";
 
-const AppRouter = ({ isAuth }) => {
+const AppRouter = ({ isAuth, onLogin }) => {
 
     return (
         <Routes>
-         <Route
-        path="/login"
-        element={
-          <PublicRoute isAuth={isAuth}>
-            <LoginPage />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <PublicRoute isAuth={isAuth}>
-            <RegisterPage />
-          </PublicRoute>
-        }
-      />
+            <Route
+            path="/login"
+            element={
+            <PublicRoute isAuth={isAuth}>
+            <LoginPage onLoginSuccess={onLogin} />
+            </PublicRoute>
+            }
+        />
+        <Route
+            path="/register"
+            element={
+            <PublicRoute isAuth={isAuth}>
+                <RegisterPage onLoginSuccess={onLogin} />
+            </PublicRoute>
+            }
+        />
 
-      {/* Rutas Privadas */}
-      <Route
-        path="/home"
-        element={
-          <PrivateRoute isAuth={isAuth}>
-            <HomePage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <PrivateRoute isAuth={isAuth}>
-            <ProfilePage />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/tasks"
-        element={
-          <PrivateRoute isAuth={isAuth}>
-            <TasksPage />
-          </PrivateRoute>
-        }
-      />
-       <Route path="*" element={<Navigate to={isAuth ? "/home" : "/login"} />} />
+        <Route
+            path="/home"
+            element={
+            <PrivateRoute isAuth={isAuth}>
+                <HomePage />
+            </PrivateRoute>
+            }
+        />
+        <Route
+            path="/profile"
+            element={
+            <PrivateRoute isAuth={isAuth}>
+                <ProfilePage />
+            </PrivateRoute>
+            }
+        />
+        <Route
+            path="/tasks"
+            element={
+            <PrivateRoute isAuth={isAuth}>
+                <TasksPage />
+            </PrivateRoute>
+            }
+        />
+        <Route path="*" element={<Navigate to={isAuth ? "/home" : "/login"} />} />
         </Routes>
     );
 };

@@ -1,19 +1,47 @@
 import useForm from "../hooks/useForm.js";
+import { useState } from "react";
+import Loading from "../../components/Loading";
 
-const LoginPage = () => {
+const LoginPage = ({ onLoginSuccess }) => {
   const { values, handleChange, handleReset } = useForm({
     username: "",
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Valores del formulario:", values);
-    handleReset();
+    setLoading(true);
+
+    try {
+      const res = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(values),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        onLoginSuccess();
+      } else {
+        alert(data.message || "Credenciales inválidas");
+        handleReset();
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error al conectar con el servidor");
+      handleReset();
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-zinc-950 text-white">
+      {loading && <Loading />}
       <div className="w-full max-w-sm bg-zinc-900/60 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-zinc-800">
         <h2 className="text-3xl font-semibold text-center mb-2 text-white tracking-tight">
           Bienvenido

@@ -7,6 +7,11 @@ import Navbar from "./components/Navbar";
 const App = () => {
   const [isAuth, setIsAuth] = useState(!!localStorage.getItem("isLogged"));
 
+  const handleLogin = () => {
+    localStorage.setItem("isLogged", "true");
+    setIsAuth(true);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("isLogged");
     setIsAuth(false);
@@ -15,7 +20,7 @@ const App = () => {
   return (
     <>
       <Navbar isAuth={isAuth} onLogout={handleLogout} />
-      <AppRouter isAuth={isAuth} />
+      <AppRouter isAuth={isAuth} onLogin={handleLogin} />
       <Footer />
     </>
   );
